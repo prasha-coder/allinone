@@ -651,14 +651,19 @@ class _AuthScreenNewState extends State<AuthScreenNew> with TickerProviderStateM
       final authService = Provider.of<AuthServiceNew>(context, listen: false);
       final user = await authService.signInWithGoogle();
       
-      if (user == null) {
+      if (user != null) {
+        // Success - user will be automatically redirected by AuthGate
+        setState(() {
+          _errorMessage = null;
+        });
+      } else {
         setState(() {
           _errorMessage = 'Demo sign-in was cancelled';
         });
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Google Sign-In failed: ${e.toString()}';
+        _errorMessage = 'Demo sign-in failed: ${e.toString()}';
       });
     } finally {
       setState(() {
@@ -682,14 +687,19 @@ class _AuthScreenNewState extends State<AuthScreenNew> with TickerProviderStateM
         _loginPasswordController.text,
       );
       
-      if (user == null) {
+      if (user != null) {
+        // Success - user will be automatically redirected by AuthGate
+        setState(() {
+          _errorMessage = null;
+        });
+      } else {
         setState(() {
           _errorMessage = 'Invalid username or password';
         });
       }
     } catch (e) {
       setState(() {
-        _errorMessage = e.toString();
+        _errorMessage = 'Login failed: ${e.toString()}';
       });
     } finally {
       setState(() {

@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import '../models/doctor_model.dart';
-import 'database_helper.dart';
+import 'web_database_helper.dart';
 
 enum AuthStatus { unauthenticated, authenticating, authenticated }
 enum UserType { doctor, googleUser }
@@ -44,7 +44,7 @@ class AuthUser {
 class AuthServiceNew with ChangeNotifier {
   final firebase_auth.FirebaseAuth _auth = firebase_auth.FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final DatabaseHelper _dbHelper = DatabaseHelper();
+  final WebDatabaseHelper _dbHelper = WebDatabaseHelper();
 
   AuthUser? _user;
   AuthStatus _status = AuthStatus.unauthenticated;
@@ -85,7 +85,7 @@ class AuthServiceNew with ChangeNotifier {
 
       // For demo purposes, simulate Google Sign-In
       // In production, you would configure the Google Client ID
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
 
       _user = AuthUser(
         uid: 'google_demo_user_${DateTime.now().millisecondsSinceEpoch}',
