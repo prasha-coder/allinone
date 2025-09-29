@@ -200,8 +200,9 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 For support and questions:
 - Create an issue in this repository
-- Contact: [Your contact information]
+- Contact: prashantmmourya@gmail.com
 
 ---
+
 
 **ThingBots** - Bridging ancient wisdom with modern technology for better health and nutrition. 🌿✨
