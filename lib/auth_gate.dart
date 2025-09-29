@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sih_2/auth_service.dart';
-import 'package:sih_2/auth_screen.dart';
+import 'package:sih_2/services/auth_service_new.dart';
+import 'package:sih_2/screens/auth_screen_new.dart';
 import 'package:sih_2/main.dart';
 import 'package:sih_2/app_theme.dart';
 
@@ -15,12 +15,12 @@ class AuthGate extends StatefulWidget {
 class _AuthGateState extends State<AuthGate> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthService>(
+    return Consumer<AuthServiceNew>(
       builder: (context, authService, child) {
         final user = authService.user;
-        
+
         if (user == null) {
-          return const AuthScreen();
+          return const AuthScreenNew();
         } else {
           return const HomeScreen();
         }

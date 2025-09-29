@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:sih_2/auth_service.dart';
+import 'package:sih_2/services/auth_service_new.dart';
 import 'package:sih_2/auth_gate.dart';
 import 'package:sih_2/app_theme.dart';
 import 'package:sih_2/firebase_options.dart';
@@ -19,7 +19,7 @@ void main() async {
   
   runApp(
     ChangeNotifierProvider(
-      create: (context) => AuthService(),
+      create: (context) => AuthServiceNew(),
       child: const MyApp(),
     ),
   );
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context, listen: false);
+    final authService = Provider.of<AuthServiceNew>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
