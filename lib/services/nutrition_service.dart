@@ -298,13 +298,110 @@ class NutritionService {
           .limit(50) // Limit for performance
           .get();
       
+      if (snapshot.docs.isEmpty) {
+        // Return demo patients if no data in Firestore
+        return _getDemoPatients();
+      }
+      
       return snapshot.docs
           .map((doc) => Patient.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
     } catch (e) {
       debugPrint('Error fetching patients: $e');
-      return [];
+      // Return demo data on error
+      return _getDemoPatients();
     }
+  }
+
+  // Demo patients for when Firestore is empty
+  List<Patient> _getDemoPatients() {
+    return [
+      Patient(
+        patientId: 'DEMO_PATIENT_001',
+        namePseudonym: 'Priya Sharma',
+        age: 28,
+        gender: 'Female',
+        contactInfo: 'priya.sharma@email.com',
+        dietaryHabits: 'Vegetarian, prefers home-cooked meals',
+        mealFrequencyPerDay: 3,
+        bowelMovements: 'Regular, once daily',
+        waterIntakeLiters: 2.5,
+        physicalActivityLevel: 'Moderate - 30 mins daily',
+        sleepPatterns: '7-8 hours, good quality sleep',
+        stressLevels: 'Low to moderate',
+        allergies: 'None known',
+        comorbidities: 'None',
+        doshaPrakritiAssessment: 'Pitta-Kapha dominant',
+      ),
+      Patient(
+        patientId: 'DEMO_PATIENT_002',
+        namePseudonym: 'Raj Kumar',
+        age: 45,
+        gender: 'Male',
+        contactInfo: 'raj.kumar@email.com',
+        dietaryHabits: 'Non-vegetarian, occasional fast food',
+        mealFrequencyPerDay: 2,
+        bowelMovements: 'Irregular, sometimes constipated',
+        waterIntakeLiters: 1.5,
+        physicalActivityLevel: 'Low - sedentary job',
+        sleepPatterns: '5-6 hours, disturbed sleep',
+        stressLevels: 'High - work pressure',
+        allergies: 'Dairy intolerance',
+        comorbidities: 'Type 2 Diabetes, Hypertension',
+        doshaPrakritiAssessment: 'Vata-Pitta dominant',
+      ),
+      Patient(
+        patientId: 'DEMO_PATIENT_003',
+        namePseudonym: 'Anita Patel',
+        age: 35,
+        gender: 'Female',
+        contactInfo: 'anita.patel@email.com',
+        dietaryHabits: 'Vegan, organic food preference',
+        mealFrequencyPerDay: 4,
+        bowelMovements: 'Regular, twice daily',
+        waterIntakeLiters: 3.0,
+        physicalActivityLevel: 'High - yoga and gym',
+        sleepPatterns: '8-9 hours, deep sleep',
+        stressLevels: 'Low - good work-life balance',
+        allergies: 'Gluten sensitivity',
+        comorbidities: 'None',
+        doshaPrakritiAssessment: 'Kapha dominant',
+      ),
+      Patient(
+        patientId: 'DEMO_PATIENT_004',
+        namePseudonym: 'Vikram Singh',
+        age: 52,
+        gender: 'Male',
+        contactInfo: 'vikram.singh@email.com',
+        dietaryHabits: 'Mixed diet, traditional Indian food',
+        mealFrequencyPerDay: 3,
+        bowelMovements: 'Regular, once daily',
+        waterIntakeLiters: 2.0,
+        physicalActivityLevel: 'Moderate - morning walks',
+        sleepPatterns: '6-7 hours, light sleeper',
+        stressLevels: 'Moderate - family responsibilities',
+        allergies: 'None',
+        comorbidities: 'High cholesterol',
+        doshaPrakritiAssessment: 'Pitta dominant',
+      ),
+      Patient(
+        patientId: 'DEMO_PATIENT_005',
+        namePseudonym: 'Sunita Reddy',
+        age: 41,
+        gender: 'Female',
+        contactInfo: 'sunita.reddy@email.com',
+        dietaryHabits: 'Vegetarian, South Indian cuisine',
+        mealFrequencyPerDay: 3,
+        bowelMovements: 'Regular, once daily',
+        waterIntakeLiters: 2.5,
+        physicalActivityLevel: 'Moderate - household activities',
+        sleepPatterns: '7-8 hours, good quality',
+        stressLevels: 'Moderate - work and family',
+        allergies: 'None',
+        comorbidities: 'Mild anemia',
+        doshaPrakritiAssessment: 'Vata-Kapha balanced',
+      ),
+    ];
   }
 
   Future<Patient?> getPatientById(String patientId) async {

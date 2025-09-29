@@ -6,6 +6,7 @@ import 'package:sih_2/auth_gate.dart';
 import 'package:sih_2/app_theme.dart';
 import 'package:sih_2/firebase_options.dart';
 import 'package:sih_2/screens/nutrition_screen.dart';
+import 'package:sih_2/screens/profile_screen.dart';
 import 'package:sih_2/utils/data_importer.dart';
 
 void main() async {
@@ -188,13 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildProfileScreen() {
-    return const Center(
-      child: Text(
-        'Profile Screen\nComing Soon!',
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 18),
-      ),
-    );
+    return const ProfileScreen();
   }
 
   Future<void> _importNutritionData() async {
