@@ -180,8 +180,12 @@ class AuthServiceNew with ChangeNotifier {
       _status = AuthStatus.authenticating;
       notifyListeners();
 
+      debugPrint('Attempting doctor login for username: $username');
       final passwordHash = _hashPassword(password);
+      debugPrint('Password hash generated: ${passwordHash.substring(0, 10)}...');
+      
       final doctor = await _dbHelper.authenticateDoctor(username, passwordHash);
+      debugPrint('Doctor lookup result: ${doctor?.fullName ?? 'Not found'}');
 
       if (doctor != null) {
         // Update last login
@@ -200,6 +204,7 @@ class AuthServiceNew with ChangeNotifier {
         debugPrint('Doctor login successful: ${_user?.displayName}');
         return _user;
       } else {
+        debugPrint('Doctor not found or invalid credentials');
         throw Exception('Invalid username or password');
       }
     } catch (e) {
