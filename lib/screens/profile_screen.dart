@@ -50,6 +50,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final user = authService.user;
+    
+    debugPrint('ProfileScreen: Building with user: ${user?.displayName}');
 
     return Scaffold(
       body: SingleChildScrollView(
