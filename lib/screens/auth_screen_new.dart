@@ -173,7 +173,7 @@ class _AuthScreenNewState extends State<AuthScreenNew> with TickerProviderStateM
             ),
             const SizedBox(height: 24),
             Text(
-              'Quick Access',
+              'Quick Access (Demo)',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: AppTheme.primaryColor,
@@ -181,7 +181,7 @@ class _AuthScreenNewState extends State<AuthScreenNew> with TickerProviderStateM
             ),
             const SizedBox(height: 16),
             Text(
-              'Sign in with your Google account for instant access to the nutrition database and demo features.',
+              'Demo Google Sign-In for instant access to the nutrition database and all features.',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: AppTheme.subtleTextColor,
@@ -219,7 +219,7 @@ class _AuthScreenNewState extends State<AuthScreenNew> with TickerProviderStateM
                         height: 20,
                         errorBuilder: (context, error, stackTrace) => const Icon(Icons.login),
                       ),
-                label: Text(_isLoading ? 'Signing in...' : 'Sign in with Google'),
+                label: Text(_isLoading ? 'Signing in...' : 'Demo Google Sign-In'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.black87,
@@ -229,7 +229,7 @@ class _AuthScreenNewState extends State<AuthScreenNew> with TickerProviderStateM
             ),
             const SizedBox(height: 16),
             Text(
-              'Demo credentials available for testing',
+              'Demo mode - No real Google authentication required',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: AppTheme.subtleTextColor,
                 fontStyle: FontStyle.italic,
@@ -653,7 +653,7 @@ class _AuthScreenNewState extends State<AuthScreenNew> with TickerProviderStateM
       
       if (user == null) {
         setState(() {
-          _errorMessage = 'Google Sign-In was cancelled or failed';
+          _errorMessage = 'Demo sign-in was cancelled';
         });
       }
     } catch (e) {

@@ -77,41 +77,26 @@ class AuthServiceNew with ChangeNotifier {
     });
   }
 
-  // Google Sign-In
+  // Google Sign-In (Demo Mode)
   Future<AuthUser?> signInWithGoogle() async {
     try {
       _status = AuthStatus.authenticating;
       notifyListeners();
 
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        _status = AuthStatus.unauthenticated;
-        notifyListeners();
-        return null;
-      }
+      // For demo purposes, simulate Google Sign-In
+      // In production, you would configure the Google Client ID
+      await Future.delayed(const Duration(seconds: 2));
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final credential = firebase_auth.GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+      _user = AuthUser(
+        uid: 'google_demo_user_${DateTime.now().millisecondsSinceEpoch}',
+        email: 'demo.user@gmail.com',
+        displayName: 'Demo Google User',
+        userType: UserType.googleUser,
       );
-
-      final firebase_auth.UserCredential userCredential = 
-          await _auth.signInWithCredential(credential);
-
-      if (userCredential.user != null) {
-        _user = AuthUser(
-          uid: userCredential.user!.uid,
-          email: userCredential.user!.email,
-          displayName: userCredential.user!.displayName,
-          userType: UserType.googleUser,
-        );
-        _status = AuthStatus.authenticated;
-        notifyListeners();
-        debugPrint('Google Sign-In successful: ${_user?.displayName}');
-        return _user;
-      }
-      return null;
+      _status = AuthStatus.authenticated;
+      notifyListeners();
+      debugPrint('Google Sign-In (Demo) successful: ${_user?.displayName}');
+      return _user;
     } catch (e) {
       debugPrint('Google Sign-In error: $e');
       _status = AuthStatus.unauthenticated;
