@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../auth_service.dart';
+import '../services/auth_service_new.dart';
 import '../app_theme.dart';
 import '../services/nutrition_service.dart';
 import '../models/patient_model.dart';
@@ -48,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
+    final authService = Provider.of<AuthServiceNew>(context);
     final user = authService.user;
     
     debugPrint('ProfileScreen: Building with user: ${user?.displayName}');
