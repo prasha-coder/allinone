@@ -731,7 +731,7 @@ class _AuthScreenNewState extends State<AuthScreenNew> with TickerProviderStateM
         qualifications: _qualificationsController.text,
       );
       
-      if (user != null) {
+      if (user != null && mounted) {
         // Clear form
         _clearForm();
         // Show success message

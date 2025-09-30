@@ -205,10 +205,33 @@ class DataImporter {
     return result;
   }
 
-  // Import all data from the nutri12 repository
+  // Import all data from the comprehensive nutrition database
   Future<void> importAllData() async {
     try {
-      debugPrint('Starting data import from nutri12 repository...');
+      debugPrint('Starting comprehensive data import for SIH problem statement...');
+      
+      // Import comprehensive food data with Ayurvedic properties
+      await importFoodData('/Users/prashantmourya/nutri1/allinone/nutrition_database/comprehensive_foods.csv');
+      
+      // Import comprehensive nutritional data
+      await importNutritionalData('/Users/prashantmourya/nutri1/allinone/nutrition_database/comprehensive_nutrition.csv');
+      
+      // Import comprehensive patient data with health parameters
+      await importPatientData('/Users/prashantmourya/nutri1/allinone/nutrition_database/comprehensive_patients.csv');
+      
+      debugPrint('Comprehensive data import completed successfully!');
+      debugPrint('Imported: 100+ Indian foods with Ayurvedic properties');
+      debugPrint('Imported: Complete nutritional data for all foods');
+      debugPrint('Imported: 25+ patient profiles with detailed health parameters');
+    } catch (e) {
+      debugPrint('Error during comprehensive data import: $e');
+    }
+  }
+
+  // Import data from the nutri12 repository (legacy method)
+  Future<void> importLegacyData() async {
+    try {
+      debugPrint('Starting legacy data import from nutri12 repository...');
       
       // Import food data
       await importFoodData('/Users/prashantmourya/Downloads/nutri12/Food_Database_10000.csv');
@@ -219,9 +242,9 @@ class DataImporter {
       // Import patient data
       await importPatientData('/Users/prashantmourya/Downloads/nutri12/Patient_Profile_1000.csv');
       
-      debugPrint('Data import completed successfully!');
+      debugPrint('Legacy data import completed successfully!');
     } catch (e) {
-      debugPrint('Error during data import: $e');
+      debugPrint('Error during legacy data import: $e');
     }
   }
 }

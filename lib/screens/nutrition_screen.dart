@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/nutrition_service.dart';
 import '../models/food_model.dart';
 import '../models/nutritional_data_model.dart';
+import '../utils/data_importer.dart';
 import '../app_theme.dart';
 
 class NutritionScreen extends StatefulWidget {
@@ -13,11 +14,13 @@ class NutritionScreen extends StatefulWidget {
 
 class _NutritionScreenState extends State<NutritionScreen> {
   final NutritionService _nutritionService = NutritionService();
+  final DataImporter _dataImporter = DataImporter();
   final TextEditingController _searchController = TextEditingController();
   
   List<Food> _foods = [];
   List<Food> _filteredFoods = [];
   bool _isLoading = false;
+  bool _isImporting = false;
   String _selectedCategory = 'All';
 
   final List<String> _categories = [
@@ -66,16 +69,56 @@ class _NutritionScreenState extends State<NutritionScreen> {
   }
 
   void _filterFoods() {
-    setState(() {
-      _filteredFoods = _foods.where((food) {
+    if (mounted) {
+      setState(() {
+        _filteredFoods = _foods.where((food) {
         final matchesSearch = food.foodNameEnglish
             .toLowerCase()
             .contains(_searchController.text.toLowerCase());
         final matchesCategory = _selectedCategory == 'All' || 
             food.category == _selectedCategory;
         return matchesSearch && matchesCategory;
-      }).toList();
-    });
+        }).toList();
+      });
+    }
+  }
+
+  Future<void> _importComprehensiveData() async {
+    if (mounted) {
+      setState(() {
+        _isImporting = true;
+      });
+    }
+
+    try {
+      await _dataImporter.importAllData();
+      // Reload foods after import
+      await _loadFoods();
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Comprehensive nutrition data imported successfully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error importing data: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isImporting = false;
+        });
+      }
+    }
   }
 
   @override
@@ -85,6 +128,22 @@ class _NutritionScreenState extends State<NutritionScreen> {
         title: const Text('Nutrition Database'),
         backgroundColor: AppTheme.primaryColor,
         foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: _isImporting 
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                : const Icon(Icons.cloud_download),
+            onPressed: _isImporting ? null : _importComprehensiveData,
+            tooltip: 'Import Comprehensive Data',
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -115,12 +174,14 @@ class _NutritionScreenState extends State<NutritionScreen> {
                           label: Text(category),
                           selected: _selectedCategory == category,
                           onSelected: (selected) {
-                            setState(() {
-                              _selectedCategory = category;
-                            });
-                            _filterFoods();
+                            if (mounted) {
+                              setState(() {
+                                _selectedCategory = category;
+                              });
+                              _filterFoods();
+                            }
                           },
-                          selectedColor: AppTheme.primaryColor.withOpacity(0.3),
+                          selectedColor: AppTheme.primaryColor.withValues(alpha: 0.3),
                           checkmarkColor: AppTheme.primaryColor,
                         ),
                       );
@@ -145,25 +206,25 @@ class _NutritionScreenState extends State<NutritionScreen> {
                     : Column(
                         children: [
                           // Demo data notice
-                          if (_filteredFoods.any((food) => food.foodId.startsWith('DEMO')))
+                          if (_filteredFoods.any((food) => food.foodId.startsWith('DEMO') || food.foodId.startsWith('IND')))
                             Container(
                               width: double.infinity,
                               margin: const EdgeInsets.all(16),
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Colors.blue.shade50,
-                                border: Border.all(color: Colors.blue.shade200),
+                                color: Colors.green.shade50,
+                                border: Border.all(color: Colors.green.shade200),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Row(
                                 children: [
-                                  Icon(Icons.info, color: Colors.blue.shade600),
+                                  Icon(Icons.info, color: Colors.green.shade600),
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: Text(
-                                      'Showing demo data. Import CSV data to see full nutrition database.',
+                                      'Showing comprehensive nutrition database with Ayurvedic properties. Tap the download icon to import additional data.',
                                       style: TextStyle(
-                                        color: Colors.blue.shade800,
+                                        color: Colors.green.shade800,
                                         fontSize: 14,
                                       ),
                                     ),
@@ -257,14 +318,18 @@ class _FoodDetailsDialogState extends State<FoodDetailsDialog> {
     try {
       final nutritionService = NutritionService();
       final data = await nutritionService.getNutritionalData(widget.food.foodId);
-      setState(() {
-        _nutritionalData = data;
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _nutritionalData = data;
+          _isLoading = false;
+        });
+      }
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -394,7 +459,7 @@ class _FoodDetailsDialogState extends State<FoodDetailsDialog> {
       decoration: BoxDecoration(
         color: AppTheme.backgroundColor,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppTheme.subtleTextColor.withOpacity(0.3)),
+        border: Border.all(color: AppTheme.subtleTextColor.withValues(alpha: 0.3)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

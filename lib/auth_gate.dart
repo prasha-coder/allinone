@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sih_2/services/auth_service_new.dart';
 import 'package:sih_2/screens/auth_screen_new.dart';
-import 'package:sih_2/main.dart';
+import 'package:sih_2/screens/role_selection_screen.dart';
 import 'package:sih_2/app_theme.dart';
 
 class AuthGate extends StatefulWidget {
@@ -22,7 +22,8 @@ class _AuthGateState extends State<AuthGate> {
         if (user == null) {
           return const AuthScreenNew();
         } else {
-          return const HomeScreen();
+          // After authentication, go to role selection
+          return const RoleSelectionScreen();
         }
       },
     );
